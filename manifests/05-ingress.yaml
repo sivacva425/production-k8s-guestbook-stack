@@ -1,1 +1,24 @@
-
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guestbook-ingress
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - guestbook.zzzzz.com
+    secretName: guestbook-tls-cert
+  rules:
+  - host: guestbook.zzzzz.com   # added the domain here
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
